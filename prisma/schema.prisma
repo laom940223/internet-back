@@ -20,6 +20,8 @@ model User {
   createdAt        DateTime           @default(now()) 
   userType    UserType    @relation(fields: [userTypeId], references: [id])
   userTypeId Int
+
+  services Service[]
 }
 
 
@@ -34,16 +36,29 @@ model UserType{
 
 model Service {
 
-  id	   Int @id @default(autoincrement())
-  user_id  Int	  
-  ip    String	
+  id	   String @id @default(cuid())
+  userId  Int?  
+  
+  name String
+  lastName String
+  phone String
+
+  paymentDay Int?
+  stripeContract String ? @unique
+
+  ip    String  @unique	
   xCoordinate Float
   yCoordinate	Float
+  
   packageId	Int
   ranchId Int
 
+  createdAt DateTime @default(now())
+
   package    InternetPackage    @relation(fields: [packageId], references: [id])
   ranch    Ranch    @relation(fields: [ranchId], references: [id])
+  user User?  @relation(fields: [userId], references: [id])
+
 }
 
 
@@ -52,6 +67,7 @@ model InternetPackage{
 
   id Int @id @default(autoincrement())
   name String  @db.VarChar(200)
+  price Float
   description String @db.VarChar(400)
   services Service[]  
 
