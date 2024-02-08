@@ -1,18 +1,27 @@
+import { FieldValidationError, ValidationError } from "express-validator"
 
 
 
-export class ValidationError {
+export type MyValidationError = {
 
     field: string
     message: string
+}
 
-    constructor(field: string, message: string){
 
-        this.field = field
-        this.message = message
+export function toMyValidation(validatorErrors: FieldValidationError[] ): MyValidationError[]{
 
-    }
+        
 
-    
+    return validatorErrors.map(err=>{
+
+        return {
+            
+            field:err.path,
+            message: err.msg 
+        } 
+            
+    })
 
 }
+

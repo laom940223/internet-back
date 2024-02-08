@@ -6,21 +6,42 @@ import { errorHandler } from './errors/error-handler'
 import { Router } from "express"
 import { apiRouter } from './routers/api-router'
 import { notFound } from './utils/not-found'
+import { PrismaClient } from '@prisma/client'
 
 dotenv.config()
+export const prisma = new PrismaClient()
+
 
 const app = express()
 
-app.use(express.json())
-app.use(helmet())
-app.use(morgan("dev"))
+const main = async ()=>{
 
 
-app.use("/api",apiRouter)
+    app.use(express.json())
+    app.use(helmet())
+    app.use(morgan("dev"))
 
-app.use("*", notFound )
 
-app.use(errorHandler)
-app.listen(process.env.PORT, ()=>{
-    console.log(`Running at port ${process.env.PORT}`)
-})
+    app.use("/api",apiRouter)
+
+    app.use("*", notFound )
+
+    app.use(errorHandler)
+
+    app.listen(process.env.PORT, ()=>{
+        console.log(`Running at port ${process.env.PORT}`)
+    })
+
+}
+
+
+
+main()
+  .then(async () => {
+    await prisma.$disconnect()
+  })
+  .catch(async (e) => {
+    console.error(e)
+    await prisma.$disconnect()
+    process.exit(1)
+  })

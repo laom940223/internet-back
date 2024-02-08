@@ -11,6 +11,8 @@ export const errorHandler= (err: Error, req:Request, res:Response, next:NextFunc
 
         res.status(err.statusCode)
 
+        console.log(err)
+
         return res.json({
 
             

@@ -1,16 +1,16 @@
-import { ValidationError } from "./ValidationError"
+import { MyValidationError } from "./ValidationError"
 
 
 export class AppError extends Error  {
 
     statusCode = 500
-    validationErrors : ValidationError[]  =[]
+    validationErrors : MyValidationError[] 
 
-    constructor(message:string, statusCode: number, validationErrors?: ValidationError){
+    constructor(message:string, statusCode: number, validationErrors?: MyValidationError[]){
 
         super(message)
         this.statusCode =statusCode
-        this.validationErrors
+        this.validationErrors = validationErrors || []
     }
 
 }
