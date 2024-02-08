@@ -17,7 +17,7 @@ export const buildResponse =<T> (statusCode: StatusCodes, data?: T, error?: AppE
 
     return {
         statusCode: statusCode,
-        data:data,
+        data:data || null,
         error: error || null
     } as ServerResponse<T>
 

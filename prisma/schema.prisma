@@ -17,5 +17,16 @@ model User {
   name  String
   lastName String
   password String
-  createdAt        DateTime           @default(now())  
+  createdAt        DateTime           @default(now()) 
+  userType    UserType    @relation(fields: [userTypeId], references: [id])
+  userTypeId Int
+}
+
+
+
+model UserType{
+
+  id Int  @id @default(autoincrement())
+  name String @unique
+  users User[]
 }
