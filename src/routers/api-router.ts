@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import { usersRouter } from "./users-router";
 import { userTypeRouter } from "./usertype-router";
 import { param } from "express-validator";
+import { ranchRouter } from "./ranch-router";
 
 
 export const apiRouter =  Router()
@@ -11,7 +12,7 @@ export const apiRouter =  Router()
 
 apiRouter.use("/users", usersRouter)
 apiRouter.use("/usertypes", userTypeRouter)
-
+apiRouter.use("/ranchs", ranchRouter)
 
 apiRouter.get("/", (req:Request, res: Response, next:NextFunction)=>{
   

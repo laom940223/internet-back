@@ -30,3 +30,39 @@ model UserType{
   name String @unique
   users User[]
 }
+
+
+model Service {
+
+  id	   Int @id @default(autoincrement())
+  user_id  Int	  
+  ip    String	
+  xCoordinate Float
+  yCoordinate	Float
+  packageId	Int
+  ranchId Int
+
+  package    InternetPackage    @relation(fields: [packageId], references: [id])
+  ranch    Ranch    @relation(fields: [ranchId], references: [id])
+}
+
+
+
+model InternetPackage{
+
+  id Int @id @default(autoincrement())
+  name String  @db.VarChar(200)
+  description String @db.VarChar(400)
+  services Service[]  
+
+}
+
+
+model Ranch {
+
+  id Int @id @default(autoincrement())
+  name String
+  services  Service[]
+
+
+}
