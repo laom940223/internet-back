@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createRanch, deleteRanchById, getAllRanchs, getRanchById } from "../handlers/ranchHandlers";
+import { createRanch, deleteRanchById, getAllRanchs, getRanchById, updateRanch } from "../handlers/ranchHandlers";
 import { body, param } from "express-validator";
 
 
@@ -28,3 +28,12 @@ export const ranchRouter = Router()
         ]
     
         ,createRanch)
+
+
+    ranchRouter.put("/:id",
+        [
+            param("id").isInt().withMessage("Provide a valid id"),
+            body("name").notEmpty()
+        ]
+        
+        ,updateRanch)

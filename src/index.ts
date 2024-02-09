@@ -4,6 +4,7 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import { errorHandler } from './errors/error-handler'
 import { Router } from "express"
+import cors from 'cors'
 import { apiRouter } from './routers/api-router'
 import { notFound } from './utils/not-found'
 import { PrismaClient } from '@prisma/client'
@@ -21,6 +22,20 @@ const main = async ()=>{
     app.use(helmet())
     app.use(morgan("dev"))
 
+    // res.set('Access-Control-Allow-Origin', 'http://localhost:3001');
+
+
+    app.use(cors({ 
+      origin: '*',
+      // methods: 
+    }))
+
+    // app.use(function(req, res, next) {
+    //   res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+    //   res.header("Access-Control-Allow-Methods", "*")
+    //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    //   next();
+    // });
 
     app.use("/api",apiRouter)
 

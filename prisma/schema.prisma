@@ -37,22 +37,19 @@ model UserType{
 model Service {
 
   id	   String @id @default(cuid())
-  userId  Int?  
   
   name String
   lastName String
   phone String
-
-  paymentDay Int?
-  stripeContract String ? @unique
-
-  ip    String  @unique	
-  xCoordinate Float
-  yCoordinate	Float
-  
+  latitude Float
+  longitude	Float
   packageId	Int
   ranchId Int
 
+  ip    String?  @unique	
+  userId  Int?  
+  paymentDay Int?
+  stripeContract String ? @unique
   createdAt DateTime @default(now())
 
   package    InternetPackage    @relation(fields: [packageId], references: [id])

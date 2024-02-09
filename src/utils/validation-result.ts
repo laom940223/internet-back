@@ -9,8 +9,6 @@ export const evaluateValidationResult = (req: Request, next:NextFunction)=>{
 
     const result = validationResult(req)
     
-    
-
     if(!result.isEmpty()){
         const transformed = toMyValidation( result.array() as FieldValidationError[] )
         
