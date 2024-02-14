@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUser, deleteUserById, getAllUsers, getUserById } from "../handlers/usersHandler";
+import { createUser, deleteUserById, getAllUsers, getUserById, updateUser } from "../handlers/usersHandler";
 import { body, param } from "express-validator";
 
 
@@ -24,11 +24,10 @@ export const usersRouter = Router()
             [
                 
                     body("email")
-                        .exists().withMessage("This is required")
                         .isEmail().withMessage("Please provide a valid email").trim(),
                     body("name").notEmpty().withMessage("This field is required").trim(),
                     body("lastName").notEmpty().trim(),
-                    body("password").notEmpty().trim(),
+                    body("password").notEmpty().withMessage("Please provide a  password").trim(),
                     body("confirmedPassword").notEmpty().trim(),
                     body("usertypeId").notEmpty().isNumeric().withMessage("This needs to be a number").trim()
                 
@@ -37,3 +36,24 @@ export const usersRouter = Router()
             ]
     
             ,createUser)
+
+
+
+
+        usersRouter.put("/:id",
+            [
+                
+                    body("email")
+                        .isEmail().withMessage("Please provide a valid email").trim(),
+                    body("name").notEmpty().withMessage("This field is required").trim(),
+                    body("lastName").notEmpty().trim(),
+                    body("password").optional().trim(),
+                    body("confirmedPassword").optional().trim(),
+                    body("usertypeId").notEmpty().isNumeric().withMessage("This needs to be a number").trim(),
+                    
+                
+                 
+                
+            ]
+    
+            ,updateUser)

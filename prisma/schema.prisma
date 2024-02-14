@@ -22,6 +22,7 @@ model User {
   userTypeId Int
 
   services Service[]
+  // payments Payment[]
 }
 
 
@@ -45,6 +46,7 @@ model Service {
   longitude	Float
   packageId	Int
   ranchId Int
+  serviceStatus ServiceStatus @default(CREATED)
 
   ip    String?  @unique	
   userId  Int?  
@@ -55,6 +57,23 @@ model Service {
   package    InternetPackage    @relation(fields: [packageId], references: [id])
   ranch    Ranch    @relation(fields: [ranchId], references: [id])
   user User?  @relation(fields: [userId], references: [id])
+
+  payments Payment[]
+
+}
+
+
+model Payment{
+
+  id Int @id @default(autoincrement())
+  
+  serviceId String
+  amount Float
+  monthlyPayment DateTime 
+  description String
+  createdAt DateTime @default(now())
+  service Service @relation(fields: [serviceId], references: [id])
+  
 
 }
 
@@ -78,4 +97,15 @@ model Ranch {
   services  Service[]
 
 
+}
+
+
+
+
+
+enum ServiceStatus {
+  ONLINE
+  OFFLINE
+  CREATED
+  PAYMENTDUE
 }

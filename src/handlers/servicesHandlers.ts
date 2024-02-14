@@ -17,7 +17,13 @@ export const getAllServices = async (req: Request, res: Response, next: NextFunc
 
     return res.json(
 
-        buildResponse(StatusCodes.OK, await prisma.service.findMany())
+        buildResponse(StatusCodes.OK, await prisma.service.findMany({
+
+            include:{
+                package:true,
+                ranch:true
+            }
+        }))
     )
 
 }
@@ -48,7 +54,13 @@ export const getServiceById = async(req:Request, res: Response, next: NextFuncti
 
     const service = await prisma.service.findUnique({where:{
         id: req.params.id
-    }})
+        },
+        include:{
+            package:true,
+            ranch:true
+        }
+
+    })
 
 
     res.status(StatusCodes.OK)
@@ -78,9 +90,14 @@ export const createService = async (req: Request, res: Response, next: NextFunct
         )
     }
 
+    if(req.body.ip===""){
+        return next( new AppError("Bad IP", StatusCodes.BAD_REQUEST, [{ field:"ip", message:"Provide a valid ip" }]) )
+    }
 
     if( req.body.ip ){
 
+
+       
 
         if(!(req.body.ip as string).match(ipformat)){
 
@@ -112,7 +129,7 @@ export const createService = async (req: Request, res: Response, next: NextFunct
 
 
 
-    const { name, lastName, phone, ip, latitude, longitude, paymentDay } = req.body
+    const { name, lastName, phone, ip, latitude, longitude, paymentDay, serviceStatus } = req.body
 
     const newService = await prisma.service.create({
 
@@ -124,6 +141,7 @@ export const createService = async (req: Request, res: Response, next: NextFunct
             longitude,
             ip,
             paymentDay,
+            serviceStatus,
             packageId: ipackage.id,
             ranchId: ranch.id
         }
@@ -191,9 +209,10 @@ export const updateServiceById = async (req: Request, res: Response, next: NextF
 
 
 
-    const { name, lastName, phone, ip, latitude, longitude, paymentDay } = req.body
+    const { name, lastName, phone, ip, latitude, longitude, paymentDay, serviceStatus } = req.body
     const { id } = req.params
 
+        // console.log(ip)
     const newService = await prisma.service.update({
         
         where:{ id }        
@@ -202,6 +221,7 @@ export const updateServiceById = async (req: Request, res: Response, next: NextF
         data:{
             name,
             lastName,
+            serviceStatus,
             phone , 
             latitude,
             longitude,

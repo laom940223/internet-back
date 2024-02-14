@@ -8,6 +8,7 @@ import cors from 'cors'
 import { apiRouter } from './routers/api-router'
 import { notFound } from './utils/not-found'
 import { PrismaClient } from '@prisma/client'
+import { authRouter } from './routers/auth-router'
 
 dotenv.config()
 export const prisma = new PrismaClient()
@@ -38,6 +39,7 @@ const main = async ()=>{
     // });
 
     app.use("/api",apiRouter)
+    app.use("/auth", authRouter)
 
     app.use("*", notFound )
 

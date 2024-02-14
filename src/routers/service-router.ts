@@ -2,6 +2,7 @@ import { Router } from "express";
 import { createService, deleteServiceById, getAllServices, getServiceById, updateServiceById } from "../handlers/servicesHandlers";
 import { body } from "express-validator";
 import { version } from "os";
+import { ServiceStatus } from "@prisma/client";
 
 
 
@@ -26,9 +27,15 @@ export const serviceRouter = Router()
             body("longitude").isFloat({ min: -180, max:180 }).withMessage("Must be bewteen -180 and 180"),
             body("packageId").notEmpty().isInt({ gt:0}),
             body("ranchId").notEmpty().isInt({ gt:0}),
-            body("paymentDay").isInt({ min:1, max: 31 }).withMessage("Must be between 1 and 31").optional()
-            // body("userId").optional().isNumeric().withMessage("The id must be a number"),
-            // body("stripeContract").optional()
+            body("paymentDay").isInt({ min:0, max: 31 }).withMessage("Must be between 1 and 31").optional(),
+            
+            body("serviceStatus")
+            .custom((value) => {
+                if (!Object.values(ServiceStatus).includes(value)) {
+                throw new Error('Invalid service status');
+                }
+                return true;
+            })
         ]
     ,createService)
 
@@ -45,7 +52,17 @@ export const serviceRouter = Router()
             body("longitude").isFloat({ min: -180, max:180 }).withMessage("Must be bewteen -180 and 180"),
             body("packageId").notEmpty().isInt({ gt:0}),
             body("ranchId").notEmpty().isInt({ gt:0}),
-            body("paymentDay").isInt({ min:1, max: 31 }).withMessage("Must be between 1 and 31").optional()
+            body("paymentDay").isInt({ min:0, max: 31 }).withMessage("Must be between 1 and 31").optional(),
+
+
+
+            body("serviceStatus")
+            .custom((value) => {
+                if (!Object.values(ServiceStatus).includes(value)) {
+                throw new Error('Invalid service status');
+                }
+                return true;
+            })
             // body("userId").optional().isNumeric().withMessage("The id must be a number"),
             // body("stripeContract").optional()
         ]
