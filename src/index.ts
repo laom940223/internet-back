@@ -1,17 +1,40 @@
-import express, { NextFunction, Request, Response } from 'express'
+import nodemailer from 'nodemailer'
+import express from 'express'
+import https from 'https'
+import session from 'express-session'
 import dotenv from "dotenv"
 import helmet from 'helmet'
+import fs from 'fs'
 import morgan from 'morgan'
 import { errorHandler } from './errors/error-handler'
-import { Router } from "express"
 import cors from 'cors'
 import { apiRouter } from './routers/api-router'
 import { notFound } from './utils/not-found'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, UserType } from '@prisma/client'
 import { authRouter } from './routers/auth-router'
+import { authenticationMiddleware } from './middleware/authentication-middleware'
 
 dotenv.config()
 export const prisma = new PrismaClient()
+
+export const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
+
+declare module 'express-session' {
+  interface Session {
+    user: {
+      // Your custom properties go here
+      email: string;
+      usertype: UserType
+      // Add more properties as needed
+    };
+  }
+}
 
 
 const app = express()
@@ -23,11 +46,28 @@ const main = async ()=>{
     app.use(helmet())
     app.use(morgan("dev"))
 
-    // res.set('Access-Control-Allow-Origin', 'http://localhost:3001');
+
+    
+
+    app.use(session({
+      secret: 'Fix this issue',
+      resave: false,
+      saveUninitialized: true,
+  
+      cookie: { 
+
+        secure: true,
+        httpOnly: true,
+        sameSite:"none",
+        maxAge: 1000 * 60 * 60 * 24 * 7
+      }
+    }))
 
 
     app.use(cors({ 
-      origin: '*',
+      origin: 'https://localhost:5173',
+
+      credentials:true
       // methods: 
     }))
 
@@ -38,16 +78,19 @@ const main = async ()=>{
     //   next();
     // });
 
-    app.use("/api",apiRouter)
+    app.use("/api", authenticationMiddleware,apiRouter)
     app.use("/auth", authRouter)
 
     app.use("*", notFound )
 
     app.use(errorHandler)
 
-    app.listen(process.env.PORT, ()=>{
-        console.log(`Running at port ${process.env.PORT}`)
-    })
+    https.createServer({
+      key: fs.readFileSync('server-key.pem'),
+      cert: fs.readFileSync('server-cert.pem'),
+    },app).listen(process.env.PORT, function(){
+     console.log(`Servidor https correindo en el puerto ${process.env.PORT}`);
+   });
 
 }
 

@@ -4,12 +4,12 @@ import { body } from "express-validator";
 
 
 
-export const userTypeRouter = Router()
+export const userRole = Router()
 
-    userTypeRouter.get("/", getAllUserTypes)
-    userTypeRouter.get("/:id", getUserTypeById)
-    userTypeRouter.delete("/:id", deleteUserTypeById)
-    userTypeRouter.post("/", 
+    userRole.get("/", getAllUserTypes)
+    userRole.get("/:id", getUserTypeById)
+    userRole.delete("/:id", deleteUserTypeById)
+    userRole.post("/", 
         [
             body("name").notEmpty().withMessage("This field is required").trim()
         ]
