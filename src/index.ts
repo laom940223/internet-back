@@ -10,7 +10,7 @@ import { errorHandler } from './errors/error-handler'
 import cors from 'cors'
 import { apiRouter } from './routers/api-router'
 import { notFound } from './utils/not-found'
-import { PrismaClient, UserType } from '@prisma/client'
+import { PrismaClient, UserRole } from '@prisma/client'
 import { authRouter } from './routers/auth-router'
 import { authenticationMiddleware } from './middleware/authentication-middleware'
 
@@ -30,7 +30,7 @@ declare module 'express-session' {
     user: {
       // Your custom properties go here
       email: string;
-      usertype: UserType
+      usertype: UserRole
       // Add more properties as needed
     };
   }

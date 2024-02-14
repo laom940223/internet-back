@@ -18,8 +18,8 @@ model User {
   lastName String
   password String
   createdAt        DateTime           @default(now()) 
-  userType    UserType    @relation(fields: [userTypeId], references: [id])
-  userTypeId Int
+  userRole    UserRole    @relation(fields: [userRoleId], references: [id])
+  userRoleId Int
 
   services Service[]
   // payments Payment[]
@@ -35,11 +35,12 @@ model RecoverPassword {
 }
 
 
-model UserType{
+model UserRole{
 
   id Int  @id @default(autoincrement())
   name String @unique
   users User[]
+	
 }
 
 

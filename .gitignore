@@ -4,3 +4,9 @@ dist
 pgdata
 docker-compose.yml
 prisma/migrations
+
+server-cert.pem
+server-key.pem
+
+./server-cert.pem
+./server-key.pem

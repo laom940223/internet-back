@@ -9,22 +9,22 @@ import { Prisma } from "@prisma/client";
 
 
 
-export const getAllUserTypes = async (req: Request, res: Response, next: NextFunction)=>{
+export const getAllUserRoles = async (req: Request, res: Response, next: NextFunction)=>{
 
-    const userTypes = await prisma.userType.findMany()
+    const userRoles = await prisma.userRole.findMany()
     return res.json(
 
-        buildResponse(StatusCodes.OK, userTypes)
+        buildResponse(StatusCodes.OK, userRoles)
     )
 }
 
 
-export const deleteUserTypeById = async (req: Request, res: Response)=>{
+export const deleteUserRoleById = async (req: Request, res: Response)=>{
 
 
     try{
 
-        await prisma.userType.delete({ where:{ id: +req.params.id} })
+        await prisma.userRole.delete({ where:{ id: +req.params.id} })
     }catch(e){
 
     }
@@ -34,24 +34,24 @@ export const deleteUserTypeById = async (req: Request, res: Response)=>{
 
 }
 
-export const getUserTypeById =async (req: Request, res: Response, next: NextFunction)=>{
+export const getUserRoleById =async (req: Request, res: Response, next: NextFunction)=>{
 
-    const usertypeid =  req.params.id
+    const userRoleId =  req.params.id
 
-    if(!usertypeid) return next(new AppError("Please provide a valid id", StatusCodes.BAD_REQUEST))
+    if(!userRoleId) return next(new AppError("Please provide a valid id", StatusCodes.BAD_REQUEST))
 
     return res.json( buildResponse( StatusCodes.OK, 
-        await prisma.userType.findUnique( {
+        await prisma.userRole.findUnique( {
 
             where:{
-                id: +usertypeid
+                id: +userRoleId
             }
         })
         ) )
 }
 
 
-export const createUserType = async (req: Request, res: Response, next: NextFunction)=>{
+export const createUserRole = async (req: Request, res: Response, next: NextFunction)=>{
     const result = validationResult(req)
 
     if(!result.isEmpty()){
@@ -62,10 +62,10 @@ export const createUserType = async (req: Request, res: Response, next: NextFunc
     }
 
     try{
-        const createdUserType = await prisma.userType.create({ data: { name: req.body.name }})
+        const createdUserRole = await prisma.userRole.create({ data: { name: req.body.name }})
         res.status(StatusCodes.CREATED)
         return res.json(
-            buildResponse(StatusCodes.CREATED, createdUserType)    
+            buildResponse(StatusCodes.CREATED, createdUserRole)    
         )
     }catch(e){
 

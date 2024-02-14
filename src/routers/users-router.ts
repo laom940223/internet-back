@@ -29,7 +29,7 @@ export const usersRouter = Router()
                     body("lastName").notEmpty().trim(),
                     body("password").notEmpty().withMessage("Please provide a  password").trim(),
                     body("confirmedPassword").notEmpty().trim(),
-                    body("usertypeId").notEmpty().isNumeric().withMessage("This needs to be a number").trim()
+                    body("userRoleId").notEmpty().isNumeric().withMessage("This needs to be a number").trim()
                 
                  
                 
@@ -49,7 +49,7 @@ export const usersRouter = Router()
                     body("lastName").notEmpty().trim(),
                     body("password").optional().trim(),
                     body("confirmedPassword").optional().trim(),
-                    body("usertypeId").notEmpty().isNumeric().withMessage("This needs to be a number").trim(),
+                    body("userRoleId").notEmpty().isNumeric().withMessage("This needs to be a number").trim(),
                     
                 
                  

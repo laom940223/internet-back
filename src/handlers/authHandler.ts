@@ -12,7 +12,7 @@ import { hashPassword } from "../utils/password-hashing"
 
 
 
-const EXPIRATION_TIME = 2
+const EXPIRATION_TIME = 10
 
 export const getMehandler= async (req: Request, res: Response, next: NextFunction)=>{
 
@@ -30,7 +30,7 @@ export const getMehandler= async (req: Request, res: Response, next: NextFunctio
     },
     include:{
         
-        userType:true
+        userRole:true
     }
 
     })
@@ -70,7 +70,7 @@ export const logInHandler = async ( req: Request, res: Response, next: NextFunct
 
     const {email, password} = req.body
 
-    const user =  await prisma.user.findUnique({ where:{ email} , include:{ userType:true} })
+    const user =  await prisma.user.findUnique({ where:{ email} , include:{ userRole:true} })
 
     if(!user){
         return next( new AppError("Invalid user", StatusCodes.BAD_REQUEST, [{field:"email", message:"Invalid email"}]) )
@@ -83,7 +83,7 @@ export const logInHandler = async ( req: Request, res: Response, next: NextFunct
         
     }
 
-    req.session.user = { email: user.email,usertype : user.userType }
+    req.session.user = { email: user.email,usertype : user.userRole }
 
     res.status(StatusCodes.OK)
     return res.json( 

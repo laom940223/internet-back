@@ -12,7 +12,7 @@ import { evaluateValidationResult } from "../utils/validation-result";
 
 export const getAllUsers = async (req:Request, res:Response, next: NextFunction)=>{
 
-    const users = await prisma.user.findMany({ include:{userType:true}})
+    const users = await prisma.user.findMany({ include:{userRole:true}})
 
     const noPassword = users.map(user=>{
 
@@ -90,12 +90,12 @@ export const createUser = async (req:Request, res: Response, next: NextFunction)
     }
 
 
-    const userType = await prisma.userType.findUnique({ where:{ id: +req.body.usertypeId}})
+    const userRole = await prisma.userRole.findUnique({ where:{ id: +req.body.userRoleId}})
 
 
-    if(!userType){
+    if(!userRole){
 
-        return next(new AppError("Invalid user type", StatusCodes.BAD_REQUEST, [{ field:"usertypeId", message:"The user type is not valid" }]))
+        return next(new AppError("Invalid user type", StatusCodes.BAD_REQUEST, [{ field:"userRoleId", message:"The user type is not valid" }]))
     }
 
     const { password, email, name, lastName  } = req.body
@@ -112,7 +112,7 @@ export const createUser = async (req:Request, res: Response, next: NextFunction)
             name,
             lastName,
             password: hashedPassword!,
-            userTypeId: userType.id
+            userRoleId: userRole.id
         }
 })
 
@@ -167,12 +167,12 @@ export const updateUser = async (req:Request, res: Response, next: NextFunction)
     
 
 
-    const userType = await prisma.userType.findUnique({ where:{ id: +req.body.usertypeId}})
+    const userRole = await prisma.userRole.findUnique({ where:{ id: +req.body.userRoleId}})
 
 
-    if(!userType){
+    if(!userRole){
 
-        return next(new AppError("Invalid user type", StatusCodes.BAD_REQUEST, [{ field:"usertypeId", message:"The user type is not valid" }]))
+        return next(new AppError("Invalid user type", StatusCodes.BAD_REQUEST, [{ field:"userRoleId", message:"The user type is not valid" }]))
     }
 
     const { password, email, name, lastName  } = req.body
@@ -211,7 +211,7 @@ export const updateUser = async (req:Request, res: Response, next: NextFunction)
             name,
             lastName,
             password: isThereAPassword ? hashedPassword! : toUpdate.password ,
-            userTypeId: userType.id
+            userRoleId: userRole.id
         }
 })
 
