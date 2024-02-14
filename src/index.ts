@@ -86,8 +86,8 @@ const main = async ()=>{
     app.use(errorHandler)
 
     https.createServer({
-      key: fs.readFileSync('server-key.pem'),
-      cert: fs.readFileSync('server-cert.pem'),
+      key: fs.readFileSync('./certs/server-key.pem'),
+      cert: fs.readFileSync('./certs/server-cert.pem'),
     },app).listen(process.env.PORT, function(){
      console.log(`Servidor https correindo en el puerto ${process.env.PORT}`);
    });
